@@ -1,34 +1,30 @@
 use std::collections::HashMap;
 use std::thread;
 use std::time::Duration;
+use core::hash::Hash;
 
-// fn simulated_expensive_calculation(intensity: u32) -> u32{
-//     println!("Calculating slowly...");
-//     thread::sleep(Duration::from_secs(2));
-//     intensity
-// }
-
-struct Cacher<T>
+struct Cacher<T, U>
 where 
-    T: Fn(u32)-> u32,
+    T: Fn(U)-> U,
 {
     calculation: T,
-    map: HashMap<u32,u32>,
+    map: HashMap<U,U>,
 }
 
-impl <T>Cacher<T> 
+impl <T, U>Cacher<T, U> 
 where
-    T: Fn(u32) -> u32,
+    T: Fn(U) -> U,
+    U: Eq + Hash + Copy,
 {
 
-    fn new(calculation_function: T) -> Cacher<T>{
+    fn new(calculation_function: T) -> Cacher<T, U>{
         Cacher {
             calculation: calculation_function,
             map: HashMap::new(),
         }
     }
 
-    fn get_value(&mut self, arg: u32) -> u32{
+    fn get_value(&mut self, arg: U) -> U{
         match self.map.get(&arg) {
             Some(v) => *v,    
             None => {
