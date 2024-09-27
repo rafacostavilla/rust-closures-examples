@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::thread;
 use std::time::Duration;
 
@@ -53,13 +54,12 @@ fn generate_workout(mut intensity: u32, random_number: u32) {
         num
     });
 
-
     if intensity < 25{
         println!(
             "Today, do {} pushups",
             expensive_closure.get_value(intensity)
         );
-        // intensity +=1;
+        intensity +=1;
         println!(
             "Next, do {} situps",
             expensive_closure.get_value(intensity)
